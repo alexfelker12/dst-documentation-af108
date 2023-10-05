@@ -1,7 +1,7 @@
 # Preface {.unnumbered}
 
-This is a Quarto book template. 
+This is Markup. 
 
-![](images/logo.png){width="30%"}
+![](images/logo.png){width="20%"}
 
 To learn more about Quarto books visit <https://quarto.org/docs/books>. To change the style of the book take a look at the [HTML Themes](https://quarto.org/docs/output-formats/html-themes.html)
