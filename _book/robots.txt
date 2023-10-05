@@ -1,1 +1,1 @@
-Sitemap: https://ORGNAME.github.io/REPONAME/sitemap.xml
+Sitemap: https://alexfelker12.github.io/dst-documentation-af108/sitemap.xml
