@@ -1,3 +1,21 @@
-# Hi
+---
+title: "Test page"
+format: "revealjs"
+---
 
-this is random markup
+
+# Main title
+
+## Sub title
+
+this is placeholder text, **fett** _kursiv_ *anderes kursiv* [Homepage](https://alexfelker12.github.io/dst-documentation-af108/ 'Homepage')
+
+::::: {.container}
+
+```{python}
+
+1 + 1
+
+```
+
+:::::

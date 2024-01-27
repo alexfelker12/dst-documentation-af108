@@ -1,6 +1,7 @@
 # ignore environment files
 .env
 */.env
+env
 
 # ignore macOS folder attribute files
 .DS_Store
@@ -18,3 +19,5 @@ __pycache__/
 /.quarto/
 /_site/
 /_*.local
+
+/env/
