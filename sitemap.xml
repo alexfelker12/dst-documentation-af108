@@ -2,22 +2,18 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://alexfelker12.github.io/dst-documentation-af108/index.html</loc>
-    <lastmod>2023-10-05T12:21:23.217Z</lastmod>
+    <lastmod>2024-02-09T18:17:21.620Z</lastmod>
   </url>
   <url>
-    <loc>https://alexfelker12.github.io/dst-documentation-af108/intro.html</loc>
-    <lastmod>2023-10-05T12:21:23.221Z</lastmod>
+    <loc>https://alexfelker12.github.io/dst-documentation-af108/data-prep.html</loc>
+    <lastmod>2024-02-09T18:17:21.616Z</lastmod>
   </url>
   <url>
-    <loc>https://alexfelker12.github.io/dst-documentation-af108/test.html</loc>
-    <lastmod>2023-10-05T12:21:23.225Z</lastmod>
+    <loc>https://alexfelker12.github.io/dst-documentation-af108/building-process.html</loc>
+    <lastmod>2024-02-09T18:17:21.616Z</lastmod>
   </url>
   <url>
-    <loc>https://alexfelker12.github.io/dst-documentation-af108/summary.html</loc>
-    <lastmod>2023-10-05T12:21:23.233Z</lastmod>
-  </url>
-  <url>
-    <loc>https://alexfelker12.github.io/dst-documentation-af108/references.html</loc>
-    <lastmod>2023-10-05T12:21:23.237Z</lastmod>
+    <loc>https://alexfelker12.github.io/dst-documentation-af108/learnings.html</loc>
+    <lastmod>2024-02-09T18:17:21.620Z</lastmod>
   </url>
 </urlset>
