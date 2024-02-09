@@ -1,0 +1,347 @@
+---
+execute: 
+  eval: false
+---
+
+<!--
+this is placeholder text
+**fett**
+*kursiv*
+[Homepage](https://alexfelker12.github.io/dst-documentation-af108/ 'Zurück zur Homepage')
+-->
+
+# Erstellungsprozess
+
+## Planung
+
+Aus diversen Modulen in meinem Studium hatte ich die Wichtigkeit einer guten Planung für den Erfolg eines Projekts als lehrreichste Erfahrung mitgenommen. Teilweise halte ich die Planung für einige Projekte in meinem Studium jedoch immer noch ein wenig zu klein und kurzsichtig, was sich im Nachhinein immer als Ärgernis darstellt.
+
+In diesem Modul hatte ich für die Planung und der schier Unmengen an Möglichkeiten zur Analyse des Datensatzes nach einer Methode Ausschau gehalten, mit denen ich verschiedene Auffälligkeiten im Datensatz schnell entdecken und untersuchen kann. Dabei hatte ich von der Homework mit Streamlit die Idee, Tabellen interaktiv mit der Auswahl von Attributen für die X- und Y-Achse zu erstellen und diese mit verschiedenen Aggregationen und Sortierungen zu kombinieren, wodurch ich zwei Attribute schnell und mit der Leichtigkeit von ein paar Klicks näher untersuchen konnte. Vieles fand aber in einigen Jupyter Notebooks statt, bei dem ich verschiedene Visualisierungen mit Altair getestet habe, um für jede Information, die ich präsentieren will, den passenden Graphtypen zu finden.
+
+## Umsetzung
+
+Um dies umzusetzen habe ich eine Funktion gebraucht, die all diese Parameter nehmen kann und mir einen Altair Chart returned. Mithilfe von ChatGPT und einigen korrigierenden Prompts habe ich diese Funktion schließlich erstellen können:
+
+::: {style="padding-bottom: 20px;"}
+```{python}
+def create_chart(df, x='', y='', aggregation='sum', chart_type='bar', title='', sort_order=None, show_text=False):
+    """
+    Create a chart based on the specified parameters.
+
+    Parameters:
+        - df: DataFrame, the input DataFrame.
+        - x: str, the column for the x-axis.
+        - y: str, the column for the y-axis.
+        - aggregation: str, the aggregation method ('average', 'sum', 'count', 'min', 'max', 'median', 'stdev', 'variance').
+        - chart_type: str, the type of chart ('bar', 'point', 'line', 'area', 'tick', 'scatter', 'boxplot').
+        - title: str, the title of the chart.
+        - sort_order: str, the sort order for the x-axis ('ascending', 'descending', None).
+        - boxplot: bool, whether to create a boxplot.
+
+    Returns:
+        - alt.Chart: Altair chart object.
+    """
+
+    title = f'{aggregation.capitalize()} of {y} by {x}' if title == '' else title
+
+    valid_aggregations = ['', 'average', 'sum', 'count',
+                          'min', 'max', 'median', 'stdev', 'variance']
+    valid_chart_types = ['bar', 'point', 'line',
+                         'area', 'tick', 'scatter', 'boxplot']
+    valid_dtypes = ['int64', 'float64', 'category']
+
+    if aggregation not in valid_aggregations:
+        raise ValueError(
+            f"Invalid aggregation method. Choose one of {valid_aggregations}.")
+
+    if chart_type not in valid_chart_types:
+        raise ValueError(
+            f"Invalid chart type. Choose one of {valid_chart_types}.")
+
+    if df[x].dtype not in valid_dtypes:
+        raise ValueError(
+            f"Invalid data type for x. Has to be one of {valid_dtypes}.")
+
+    chart_type_mapping = {
+        'bar': alt.Chart(df).mark_bar(),
+        'point': alt.Chart(df).mark_point(),
+        'line': alt.Chart(df.sort_values(by=[x])).mark_line(),
+        'area': alt.Chart(df).mark_area(),
+        'tick': alt.Chart(df).mark_tick(),
+        'scatter': alt.Chart(df).mark_circle(),
+        'boxplot': alt.Chart(df).mark_boxplot()
+    }
+
+    x_enc = f'{x}:O' if df[x].dtype == 'category' else f'{x}:Q'
+    boxplot_y_enc = f'{y}:Q'
+    y_enc = f'{aggregation}({y}):Q' if aggregation else f'{y}:O' if df[
+        y].dtype == 'category' else f'{y}:Q'
+
+    if chart_type == 'boxplot':
+        return chart_type_mapping['boxplot'].encode(
+            x=alt.X(x_enc, sort='y' if sort_order ==
+                    'ascending' else '-y' if sort_order == 'descending' else None),
+            y=alt.Y(boxplot_y_enc),
+            color=x_enc,
+            tooltip=[x_enc, y_enc],
+        ).properties(
+            title=title
+        )
+    else:
+        chart = chart_type_mapping[chart_type].encode(
+            x=alt.X(x_enc, sort='y' if sort_order ==
+                    'ascending' else '-y' if sort_order == 'descending' else None),
+            y=alt.Y(y_enc),
+            color=x_enc,
+        )
+
+        text_labels = alt.Chart(df).mark_text(
+            align='center',
+            baseline='bottom',
+            dx=0,
+            fontSize=14,
+        ).encode(
+            x=alt.X(x_enc, sort='y' if sort_order ==
+                    'ascending' else '-y' if sort_order == 'descending' else None),
+            y=alt.Y(y_enc),
+            text=alt.Text(y_enc, format='.2f'),
+            opacity=alt.value(1) if show_text else alt.value(0),
+        )
+
+        return (chart + text_labels).properties(
+            title=title,
+            width='container'
+        )
+
+```
+
+:::
+
+::: {style="padding-bottom: 30px;"}
+
+Dies funktioniert allgemein so, dass anhand des übergebenen Chart Typs die passende Altair Chart Funktion benutzt wird und aufbauend auf diesem das Encoding und die Properties basierend auf den anderen übergeben Parameter hinzugefügt werden.
+
+Mithilfe dieser Funktion konnte ich eine Vielzahl verschiedener Graphen erstellen, die mir geholfen haben, die Daten besser zu verstehen. Auch wenn man nicht jeden Graphen mit dieser Funktion visualisieren kann, war sie meiner Meinung nach hilfreich und informativ genug, sodass ich mich entschieden habe, diese Funktion in meinem Dashboard für die spielerische Nutzung zu integrieren, bzw. drinnen zu lassen.
+
+:::
+
+Für die RevealJS Präsentation und dem Streamlit Dashbaord habe ich noch zwei weitere Graphen erstellt und diese ähnlich wie die erste in einer Funktion zum einfachen Aufrufen verpackt.
+Ein Graph war die Länderkarte, welche man mit der `create_chart()` Funktion nicht ohne weiteres erstellen konnte. Hierzu habe ich dann, ebenfalls mit der Hilfe von ChatGPT, diese Funktion erstellt (verkürzt, Error-Handling, Chart-Mapping und x-/y-encoding genau wie bei `create_chart()`):
+
+::: {style="padding-bottom: 20px;"}
+```{python}
+def create_map_chart(df=df, mark_column='', sel_locs=[], aggregation='sum', marker_type='point', title=''):
+    
+    # ...
+    # US states background
+    states = alt.topo_feature(data.us_10m.url, 'states')
+    background = alt.Chart(states).mark_geoshape(
+        fill='lightgray',
+        stroke='white',
+    ).encode(
+        tooltip=alt.value(None)
+    ).properties(
+        title=title,
+    ).project('albersUsa')
+
+    # data points
+    points = marker_type_mapping[marker_type].encode(
+        longitude='Longitude:Q',
+        latitude='Latitude:Q',
+        size=alt.Size(c_enc, title=title),
+        color='Location:N',
+        tooltip=['Location:N', alt.Tooltip(c_enc, format='.2f')],
+    ).interactive()
+
+    # selected states
+    text_labels = alt.Chart(filtered_df).mark_text(dx=0, dy=-13, color='black').encode(
+        longitude='Longitude:Q',
+        latitude='Latitude:Q',
+        text=alt.Text(f'{c_enc}', format='.2f'),
+        tooltip=alt.value(None)
+    )
+
+    final_map_chart = background + points + text_labels
+    return final_map_chart
+
+```
+
+:::
+
+::: {style="padding-bottom: 30px;"}
+
+Diese Funktion funktioniert ähnlich wie die `create_chart()` Funktion nur, dass diese Funktion ein Altair Chart returned, welches aus drei Schichten besteht. Die Karte ist der lediglich der Hintergrund (Staatsgrenzen), während die Punkte innerhalb der einzelnen Staaten der eigentliche informative Graph sind. Diese Funktion funktioniert ausschließlich für Chart Maps.
+
+:::
+
+Die andere Funktion war die „create_subscription_grouped_chart“, welche einen gruppierten Bar Chart erstellt. Dieser Chart wurde auch nur einmal aufgezeigt, weshalb es hier für einen geringeren Aufwand keine Parameter für Variationen gab. Der Grouped Chart hatte die Aufgabe, aufzuzeigen, wie sich die genutzten Discounts auf die Kunden mit und ohne Subscription (oder Premium Status) verteilen:
+
+::: {style="padding-bottom: 20px;"}
+```{python}
+def create_subscription_grouped_chart():
+    grouped_df = df.groupby(['Subscription Status', 'Discount Applied'], observed=True)[
+        'Purchase Amount (USD)'].sum().reset_index()
+
+    sp_chart = alt.Chart(grouped_df).mark_bar().encode(
+        x='Discount Applied:N',
+        y='sum(Purchase Amount (USD)):Q',
+        color='Subscription Status:N',
+        tooltip=['Subscription Status:N', 'Discount Applied:N',
+                 'sum(Purchase Amount (USD)):Q']
+    ).properties(
+        width='container',
+        title='Sum of Purchase Amount (USD) per Subscription Status by Discount Applied'
+    )
+
+    return sp_chart
+
+```
+
+:::
+
+
+## RevealJS Aufbau
+
+Mithilfe dieser drei Funktionen war ich in der Lage die RevealJS Präsentation und das Streamlit Dashboard aufzubauen. Dadurch, dass die Graphen anhand der in die jeweiligen Funktion übergebene Parameter aufgebaut und individualisiert werden, konnten sie für statische als auch dynamische Darstellungen der Graphen benutzt werden. Aufgrund dessen konnte ich sowohl bei der Quarto Präsentation als auch beim Streamlit Dashboard diese Funktionen gleichermaßen nutzen und musste nur die Parameter anpassen. 
+Durch die Quarto Markdown Syntax und CSS Style-Rules konnte ich das Layout einer Slide in der Basis so aufbauen:
+
+::: {style="padding-bottom: 20px;"}
+```{python}
+create_chart(df=df, x='Subscription Status', y='Previous Purchases',
+             aggregation='average', chart_type='bar', show_text=True)
+             
+```
+
+:::
+
+
+Bei einigen Slides waren noch einige Text und andere Visualisierungselemente enthalten die ich einfach mit dem aus der `create_chart()` Funktion erstellten Chart kombinieren konnte:
+
+::: {style="padding-bottom: 20px;"}
+```{python}
+chart_ip = create_chart(df=df, x='Item Purchased', y='Purchase Amount (USD)',
+                        aggregation='sum', chart_type='scatter', sort_order='ascending', lower_threshold=8000, upper_threshold=10000)
+
+# Hinzufügen der waagrechten Linie für das untere Threshold
+lower_line = alt.Chart(pd.DataFrame({'y': [8000]})).mark_rule(
+    color='red').encode(y='y:Q')
+
+# Hinzufügen der waagrechten Linie für das obere Threshold
+upper_line = alt.Chart(pd.DataFrame({'y': [10000]})).mark_rule(
+    color='green').encode(y='y:Q')
+
+# Kombinieren von Chart, Linie und Text mit der layer-Methode
+final_chart = alt.layer(chart_ip, lower_line,
+                        upper_line).properties(width='container')
+
+final_chart
+
+```
+
+:::
+
+Hier wurde beispielsweise noch eine Threshold Linie für zwei Werte erstellt die, dank des Altair Frameworks, ganz einfach mit `alt.layer()` kombiniert werden konnten, wobei hier die Chart aus der `create_chart()` Funktion immer die Basis darstellt.
+
+Kombiniert mit der Quarto Markdown Syntax konnte ich somit recht einfach eine Slide in meiner Präsentation aufbauen. Dies war mir sehr wichtig, da bei der Homework dazu am Ende eine **800 Zeilen** Datei rauskam, die zunächst für mich persönlich sehr schwer zu überschauen war, ich aber auch da den funktionalen Ansatz genommen habe und somit die „Fehler“ dieses Mal ausbessern und mich wesentlich einfacher zurechtfinden konnte.
+
+Slides, bei der keine Graphen vorkommen wurden mit Quarto Markdown und HTML zusammengebaut.
+
+
+## Streamlit Aufbau
+
+Gleichermaßen konnte ich das Dashboard mit der Funktion recht einfach aufbauen:
+
+::: {style="padding-bottom: 20px;"}
+```{python}
+df = f.get_df()
+
+st.sidebar.title('Filter')
+
+# inputs
+x_axis = st.sidebar.selectbox("Select X-axis:", df.columns)
+y_axis_list = list(set(df.columns).difference([x_axis]))
+
+default_y_axis = 'Purchase Amount (USD)'
+
+if x_axis != default_y_axis:
+    y_axis_list.remove(default_y_axis)
+    y_axis_list.insert(0, default_y_axis)
+
+y_axis = st.sidebar.selectbox(
+    "Select Y-axis:", y_axis_list)
+
+chart_type = st.sidebar.radio(
+    "Select Chart Type:", ['bar', 'point', 'line', 'area', 'tick', 'scatter', 'boxplot'])
+
+sorting = None
+aggregation = ''
+if df[y_axis].dtype in ['int64', 'float64']:
+    sorting = st.sidebar.radio("Select sorting order:", [
+        None, 'ascending', 'descending'])
+
+    aggregation = st.sidebar.selectbox("Select Aggregation:", [
+        'sum', 'average', 'count', 'min', 'max', 'median', 'stdev', 'variance'])
+
+# --------------------------------------------------------- PAGE
+
+# ...
+
+try:
+    st.altair_chart(f.create_chart(df=df, x=x_axis, y=y_axis, aggregation=aggregation,
+                    chart_type=chart_type, sort_order=sorting), use_container_width=True)
+except Exception as e:
+    st.write(f'{e}')
+
+```
+
+:::
+
+In diesem Beispiel musste ich lediglich durch Streamlit Widgets und vereinzelt weiterführender Logik die Parameter sammeln und in die `create_chart()` übergeben. Das dataframe und die Funktion werden von einer externen py-Datei geladen, in der alle Funktionen gesammelt sind. Dabei sind alle Funktionen gecached, damit die App insgesamt perfomanter läuft:
+
+::: {style="padding-bottom: 20px;"}
+```{python}
+@st.cache_data
+def get_df():
+    # ...
+
+@st.cache_data
+def create_chart(**kwargs):
+    # ...
+
+```
+
+:::
+
+
+Da die `create_chart()` Funktion ursprünglich für diesen Anwendungsfall gebaut war, lief das ohne großartige Probleme und ein Chart konnte somit sehr einfach zusammengestellt werden.
+
+Die Struktur meines Dashboard war so aufgebaut:
+
+::: {style="padding-bottom: 20px;"}
+```{.python filename="app.py"}
+import streamlit as st
+from playground import playground
+from country_overview import country_overview
+from shopping_trends import shopping_trends
+
+def main():
+    # Create a navigation bar to switch between pages
+    selected_page = st.sidebar.radio(
+        "Select Page", ["Shopping Trends", "Country Overview", "Playground"])
+
+    # Render the selected page
+    if selected_page == "Country Overview":
+        country_overview()
+    elif selected_page == "Shopping Trends":
+        shopping_trends()
+    elif selected_page == "Playground":
+        playground()
+
+if __name__ == "__main__":
+    main()
+
+```
+
+:::
+
+Eine Ansicht war durch den Radio Input immer eine existierende Seite. Standardgemäß ist die Zusammenfassung der Präsentation ausgewählt und über die anderen Radio Buttons kann man ganz einfach auf die anderen Seiten des Dashboard navigieren. Dabei war jede Seite in einer Funktion verpackt, die hier je nach ausgewählten Radio ausgeführt und somit für den Nutzer gerendet wird.

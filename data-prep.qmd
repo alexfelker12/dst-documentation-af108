@@ -1,0 +1,134 @@
+---
+execute: 
+  eval: false
+---
+
+# Preparation & Exploration
+
+## Vorgehen
+
+Bevor ich mit Altair Visualisierungen und meine RevealJS oder Streamlit-App erstellt habe, hatte ich selbstverständlich zuvor den Datensatz mithilfe von Pandas in Jupyter Notebooks geladen und mit unterschiedlichen Hilfsfunktionen den Dataframe und die Spalten analysiert:
+
+```{python}
+df.info()
+
+for col in df.columns.tolist():
+    print('')
+    print('')
+    print(f'Column: {col}')
+    print('--- describe ---------------')
+    print(df[col].describe())
+    print('--- unique -----------------')
+    print(df[col].unique().tolist())
+    print('--- value counts -----------')
+    print(df[col].value_counts())
+
+```
+
+::: {style="padding-top: 20px;"}
+:::
+
+Rausgekommen ist dabei, dass der Datensatz aus 18 Spalten mal 3900 Zeilen besteht. Eine Zeile steht dabei für einen Einkauf, die jeweils von einem eindeutigen Kunden getätigt wurde. Da eine dieser Zeilen die ID eines Kunden darstellen soll, hat diese keinen Wert für die Analyse und wird somit aus dem Dataframe entfernt. Zeitgleich sollen auch alle „null-values“ entfernt werden, die bei diesem Datensatz jedoch nicht existieren, aber aufgrund von Vollständigkeit und Fehlervermeidung versucht entfernt zu werden:
+
+```{python}
+# remove ID column
+df = df.drop(columns=['Customer ID']) if 'Customer ID' in df.columns else df
+
+# remove rows with missing values
+df = df.dropna() if df.isnull().values.any() else df
+
+```
+
+::: {style="padding-top: 20px;"}
+:::
+
+
+Um Altersunterschiede zu untersuchen habe ich dem Dataframe die Spalte „Age Group“ hinzugefügt, dessen Größe der Bins ich in der Alterspanne von ähnlichen Lebensumständen gewählt habe.
+
+```{python}
+# Define age ranges
+bins = [0, 26, 36, 46, 56, 66, 71]
+labels = ['18-25', '26-35', '36-45', '46-55', '56-65', '66-70']
+df['Age Group'] = pd.cut(df['Age'], bins=bins, labels=labels, right=False)
+
+```
+
+::: {style="padding-top: 20px;"}
+:::
+
+
+Da Daten zum Standort der Kunden existieren, ist eine Map Chart der ideale Weg, geographische Zusammenhänge zu untersuchen und allgemein die Standorte zu veranschaulichen. Hierfür haben aber die Latitude und Longitude gefehlt, um diese mit Altair zu visualisieren. Aufgrund von Fehler und dem sehr hohen Aufwand, diese Informationen durch eine Python Library in Realtime für die Visualisierung im Python Skript zu laden, habe ich dies eigenhändig in das Dataframe eingefügt. Die Latitude und Longitude habe ich dann mithilfe einer API recht schnell für jeden Bundesstaat herausfinden und nachtragen können und damit die zwei fehlenden Spalten zum Dataframe hinzugefügt (verkürzt, schemafolgend für alle Locations):
+
+```{python}
+# add longitude and latitude
+coordinates_data = [
+    {"Location": "Montana", "Latitude": 46.879681, "Longitude": -110.362564},
+    {"Location": "California", "Latitude": 36.778259, "Longitude": -119.417931},
+    {"Location": "Idaho", "Latitude": 44.068203, "Longitude": -114.742043},
+    {"Location": "Illinois", "Latitude": 40.633125, "Longitude": -89.398529},
+    # ...
+]
+
+# Erstelle ein neues DataFrame für die manuell eingegebenen Koordinaten
+coordinates_df = pd.DataFrame(coordinates_data)
+
+# Füge die manuell eingegebenen Koordinaten zum ursprünglichen DataFrame hinzu
+df = pd.merge(df, coordinates_df, on="Location", how="left")
+
+```
+
+::: {style="padding-top: 20px;"}
+:::
+
+
+Geplant hatte ich auch, mithilfe eines Line Charts eine zeitliche Entwicklung innerhalb eines Jahres der Einkäufe aufzuzeigen. Diese wurde jedoch am Ende aufgrund der unklaren und knappen Informationen über den Zeitpunkt der Einkäufe, die ich nur über die Jahreszeit erhalten konnte, doch nicht aufgezeigt. Hierzu konnte ich auch nichts Relevantes im Datensatz finden. Um ein konkretes Datum für die Einkäufe zu erhalten habe ich je nach Jahreszeit das Anfangsdatum der Jahreszeit als „Einkaufsdatum“ benutzt (zumindest nur anfangs geplant):
+
+```{python}
+# Funktion zur Berechnung des passenden Datums für jede Jahreszeit
+def get_season_date(season):
+    if season == 'Spring':
+        return pd.to_datetime('2023-03-21')
+    elif season == 'Summer':
+        return pd.to_datetime('2023-06-21')
+    elif season == 'Fall':
+        return pd.to_datetime('2023-09-23')
+    elif season == 'Winter':
+        return pd.to_datetime('2023-12-21')
+    else:
+        return None
+
+# Füge eine neue Spalte 'Season Date' hinzu
+df['Season Date'] = df['Season'].apply(get_season_date)
+
+df['Season Date'] = pd.to_datetime(df['Season Date'], format='%Y-%m-%d')
+
+```
+
+::: {style="padding-top: 20px;"}
+:::
+
+
+Schließlich habe ich noch für die Nutzung der Spalten mit Altair alle ordinalen und nominalen Spalten als Typ „category“ deklariert:
+
+```{python}
+# convert categorical columns
+categorical_columns = ['Gender', 'Item Purchased', 'Category', 'Location', 'Size', 'Color', 'Season', 'Subscription Status', 'Shipping Type', 'Discount Applied', 'Promo Code Used', 'Payment Method', 'Frequency of Purchases', 'Age Group']
+df[categorical_columns] = df[categorical_columns].astype('category')
+
+```
+
+::: {style="padding-top: 20px;"}
+:::
+
+
+## Ergebnisse der Exploration/Preparation
+
+Mit den Homeworks hatte ich nun einige Erfahrungen mit der Visualisierung durch Altair und der Aufbau einer Präsentation mit Quarto, explizit RevealJS, erhalten können, wodurch ich einen anderen Blickwinkel auf die Daten nach den Homeworks hatte als vor den Homeworks. Beim gründlicheren Analysieren des Datensatzes wurde mir bewusst, dass der Datensatz doch einige Herausforderungen im Blick auf lehrreiche Rückschlüsse mit sich bringt, da die Daten über die jeweiligen Einkäufe sehr limitiert waren. Dies schien für mich nicht sonderlich repräsentativ für die Daten in einem echten Shopping Unternehmen:
+
+1.	Es gibt eine Spalte „Previous Purchases“, die besagt, wie viele Einkäufe der Kunde zuvor getätigt hat. Informationen über diese bisherigen Einkäufe gibt es leider nicht. Dies hätte sicher interessante Einblicke auf das Kaufverhalten von Kunden über einen Zeitverlauf gegeben.
+
+2.	Es wurde immer nur ein Gegenstand erworben, was in der Realität beinahe unmöglich ist, dass bei keinem Einkauf mehr als ein Gegenstand erworben wurde, da diverse Verkaufsgegenstände in „Spar-Bundles“ (o.ä.) verkauft werden, viele Gegenstände nur in Kombination mit anderen Gegenständen gut aussehen / funktionieren / ein Ganzes ergeben und man sich dutzende Einzellieferungen spart. Hierbei wäre es interessant herauszufinden, welche Kombinationen an Kleidungsstücken im Trend sind.
+
+3.	Das konkrete Datum eines Einkaufs war auch nicht hinterlegt, nur die Jahreszeit in dem der Einkauf stattfand. Hier hätte man sicherlich interessante Informationen in Bezug auf beliebte Einkaufstage erhalten können. 
+
+4.	Allgemein waren die Daten sehr gleichmäßig verteilt und man hat kaum Trends zueinander gefunden. Nur bei wenigen Spalten konnte man bei den Ausprägungen deutlich erkennen, dass diese einen höheren Umsatz als die anderen Ausprägungen untereinander erzeugten.

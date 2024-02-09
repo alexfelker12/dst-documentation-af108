@@ -1,0 +1,18 @@
+# Schlusswörter
+
+## Fazit & Herausforderungen
+
+Eine besondere Herausforderung war eine richtige Story aus den Erkenntnissen der Analyse und den erstellten Graphen zu bilden. Wie schon anfangs erwähnt gibt es keine nützlichen zeitlichen Informationen, weshalb es unmöglich für mich war die Entwicklung der Daten oder zeitlich abhängige Trends Stück für Stück dem Publikum zu veranschaulichen.
+
+Durch den funktionellen Ansatz, den ich von anfang an verfolgt hatte, war es gar nicht so kompliziert, die Inhalte der Präsentation in das Dashbaord zu platzieren und andersrum. Dies war für das Projekt äußerst hilfreich, da es so schon viele Inhalte sind, die man in der Präsentation und dem Dashboard platzieren muss und mann dadurch den Inhalt nicht ständig auf das andere Tool anpassen musste. Dadurch war der Aufbau nicht durch sonderlich große Probleme gestört worden.
+
+Was mir sehr gefallen und zugleich nicht gefallen hat, waren die Frameworks mit denen wir unser Projekt aufbauen sollten. **Quarto** war dabei für mich leider ziemlich fehleranfällig, weshalb ich beim Aufbau der RevealJS Präsentation sehr viel Troubleshooting betreiben musste. Die ständigen Fehler waren teils sehr frustrierend, weshalb ich zukünftig ungerne damit arbeiten würde. **Streamlit** hingegen war ein für mich sehr überraschendes neues Tool, da man hier sehr einfach eine interaktive Nutzeroberfläche erstellen kann und dies mit Python umsetzt, wodurch einige Anwendungsfälle einfach umgesetzt werden können (Beispielsweise ein KI-Chatbot, welches nicht durch eine OpenAI API oder ähnlichem funktioniert).
+
+
+## Gelerntes
+
+Eines der Dinge, die ich besser hätte machen können, war die Reihenfolge der präsentierten Informationen. In diesem Datensatz hatte ich von Länderdaten bis hin zu dem eigentlichen Produkt mehrere Ebenen, die ich mit dem Fortschritt der Präsentation immer abstufen könnte, also beispielsweise: Location -> Category -> Color -> Item Purchased -> … oder so ähnlich. 
+
+Außerdem habe nun ein ungefähres Gefühl, mit welchen Graphentypen man am besten welche Art von Daten am besten darstellt. Hierbei hätte ich im Nachhinein gerne mehr Zeit reingesteckt, um mir mit dieser Aussage sicher zu sein. Jedoch denke ich, dass ich lediglich nur genug Übung brauche, um ein Gefühl für das Datastory Telling zu erhalten.
+
+Auch wenn, wie zuvor erwähnt, mir nicht jedes Framework, dass in diesem Modul benutzt werden sollte, gefallen bzw. gelegen hat, habe ich dennoch Erfahrungen mit den Tools gesammelt und Streamlit sogar in anderen Modulen angewandt, wodurch ich meine Fertigkeiten im besagten Tool verbessern konnte. Kompliziert aber dennoch sehr spannend war dabei zu lernen, wie das rendering Lifecycle in Streamlit funktioniert, wodurch ich nun in der Lage bin, kompliziertere Apps zu bauen und durch das Design des Frameworks geht das sogar auch recht schnell.

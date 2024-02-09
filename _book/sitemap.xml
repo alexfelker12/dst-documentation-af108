@@ -2,22 +2,34 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://alexfelker12.github.io/dst-documentation-af108/index.html</loc>
-    <lastmod>2023-11-27T09:37:14.544Z</lastmod>
+    <lastmod>2024-02-09T15:03:23.348Z</lastmod>
   </url>
   <url>
     <loc>https://alexfelker12.github.io/dst-documentation-af108/intro.html</loc>
-    <lastmod>2023-10-30T08:59:29.249Z</lastmod>
+    <lastmod>2024-02-08T16:33:41.228Z</lastmod>
   </url>
   <url>
     <loc>https://alexfelker12.github.io/dst-documentation-af108/test.html</loc>
-    <lastmod>2023-11-27T09:25:14.138Z</lastmod>
+    <lastmod>2024-02-08T16:34:48.945Z</lastmod>
   </url>
   <url>
     <loc>https://alexfelker12.github.io/dst-documentation-af108/summary.html</loc>
-    <lastmod>2023-10-30T08:59:29.265Z</lastmod>
+    <lastmod>2024-02-08T15:53:48.773Z</lastmod>
   </url>
   <url>
     <loc>https://alexfelker12.github.io/dst-documentation-af108/references.html</loc>
-    <lastmod>2023-10-30T08:59:29.275Z</lastmod>
+    <lastmod>2024-02-08T16:07:04.637Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexfelker12.github.io/dst-documentation-af108/learnings.html</loc>
+    <lastmod>2024-02-09T17:44:30.407Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexfelker12.github.io/dst-documentation-af108/data-prep.html</loc>
+    <lastmod>2024-02-09T17:44:17.544Z</lastmod>
+  </url>
+  <url>
+    <loc>https://alexfelker12.github.io/dst-documentation-af108/building-process.html</loc>
+    <lastmod>2024-02-09T17:44:23.418Z</lastmod>
   </url>
 </urlset>

@@ -1,7 +1,8 @@
-# Preface {.unnumbered}
+# Einführung - Gedanken - Motivation {.unnumbered}
 
-This is Markup. Test Text
 
-![](images/logo.png){width="20%"}
+Auf der Suche nach einem Datensatz für das Projekt bin ich auf die Website [Kaggle](https://www.kaggle.com/) gestoßen, bei der viele, schon zu einem gewissen Grad aufbereitete, Datensätze für Machine-Learning Zwecke zur freien privaten Nutzung zur Verfügung stehen. Für die Bearbeitung des Projekts wurden ca. 20 Attribute mit unterschiedlich quantitativen und qualitativen Spalten empfohlen. Daraufhin hielte ich nach Datensätzen, die diesen Anforderungen entsprechen, Ausschau und hatte neben dem [Invistico Airline Customer Satisfaction](https://www.kaggle.com/datasets/yakhyojon/customer-satisfaction-in-airline 'Invistico Airline Datensatz') Datensatz, welches eines der im „Big Idea Worksheet“ ausgewählte Datensatz als Kandidat für das Projekt zur Verfügung stand, den [Customer Shopping Trends](https://www.kaggle.com/datasets/iamsouravbanerjee/customer-shopping-trends-dataset 'Customer Shopping Trends Datensatz') Datensatz gefunden, welches der andere Kandidat für das Projekt darstellte.
 
-To learn more about Quarto books visit <https://quarto.org/docs/books>. To change the style of the book take a look at the [HTML Themes](https://quarto.org/docs/output-formats/html-themes.html)
+Entschieden habe ich mich für den „Customer Shopping Trends“ Datensatz, da ich in diesem Datensatz mehr Potenzial für aussagekräftigere Visualisierungen und lehrreicher Erkenntnissen sah als beim anderen Kandidaten. Weitere voreilige Schlüsse wollte ich über den ausgewählten Datensatz jedoch nicht ziehen, da ich im Bereich des Datastory-Telling keine Vorkenntnisse besitze, vor allem aus dem Grund, dass ich in meinem Studium mehr auf die technischen und wirtschaftlichen Aspekte in Bezug auf Daten achten musste. Das verständliche Darstellen von Daten, als auch das erzählerische Überbringen von Informationen war und ist zu einem gewissen Teil immer noch eine große Herausforderung für mich. 
+
+**Disclaimer**: *Die in der Dokumentation folgenden Code-Ausschnitte sind mithilfe von diversen Foren, wie [Stackoverflow](https://stackoverflow.com/ 'Zur Homepage'), [Stackexchangge](https://stackexchange.com/ 'Zur Homepage') etc. und ChatGPT von [OpenAI](https://openai.com/ 'Zur Homepage') zusammengestellt worden!*

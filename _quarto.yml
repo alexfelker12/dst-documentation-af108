@@ -6,21 +6,21 @@ execute:
 
 book:
   page-navigation: true
-  title: "Template"
-  site-url: "https://alexfelker12.github.io/dst-documentation-af108/"
+  title: Projekt Dokumentation
+  subtitle: "Von Alexander Felker (Mat. Nr: 42132)"
+  site-url: https://alexfelker12.github.io/dst-documentation-af108/
   repo-url: https://github.com/alexfelker12/dst-documentation-af108
   repo-actions: [edit, issue]
   open-graph: true
-  image: "/images/logo.png"
-  favicon: "/images/logo.png"
+  image: /images/logo.png
+  favicon: /images/logo.png
   search:
     type: overlay  
   chapters:
     - index.qmd
-    - intro.qmd
-    - test.qmd
-    - summary.qmd
-    - references.qmd
+    - data-prep.qmd
+    - building-process.qmd
+    - learnings.qmd
 
 format:
   html:
@@ -28,8 +28,9 @@ format:
     theme:
       light: [cosmo, style/style.scss]
       dark: [cosmo, style/dark.scss]
-    mainfont: "Atkinson Hyperlegible"
+    mainfont: Atkinson Hyperlegible
     code-copy: true
     code-overflow: wrap
+    link-external-newwindow: true
 
 bibliography: references.bib
